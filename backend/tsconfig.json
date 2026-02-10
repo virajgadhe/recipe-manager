@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
+    "types": ["node"],
     "target": "ES2020",
+    "module": "CommonJS",
     "module": "commonjs",
     "rootDir": ".",
     "outDir": "dist",

@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RecipeStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  recipes      Recipe[]
+  likes        Like[]
+  createdAt    DateTime @default(now())
+}
+
+model Recipe {
+  id          String       @id @default(uuid())
+  title       String
+  description Json
+  status      RecipeStatus @default(DRAFT)
+  publishedAt DateTime?
+  authorId    String
+  categoryId  String
+  author      User         @relation(fields: [authorId], references: [id])
+  category    Category     @relation(fields: [categoryId], references: [id])
+  ingredients Ingredient[]
+  likes       Like[]
+  createdAt   DateTime     @default(now())
+}
+
+model Ingredient {
+  id       String @id @default(uuid())
+  name     String
+  quantity String
+  recipeId String
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+}
+
+model Category {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  recipes Recipe[]
+}
+
+model Like {
+  id       String @id @default(uuid())
+  userId   String
+  recipeId String
+  user     User   @relation(fields: [userId], references: [id])
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+
+  @@unique([userId, recipeId])
+}
