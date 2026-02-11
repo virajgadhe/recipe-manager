@@ -38,11 +38,14 @@ export const loginUser = async (email: string, password: string) => {
     throw new Error('Invalid credentials');
   }
 
-  const token = jwt.sign(
-    { userId: user.id },
-    process.env.JWT_SECRET as string,
-    { expiresIn: process.env.JWT_EXPIRES_IN },
-  );
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT secret not configured');
+  }
+
+  const token = jwt.sign({ userId: user.id }, secret, {
+    expiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
+  });
 
   return { user, token };
 };
