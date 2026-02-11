@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -43,9 +43,15 @@ export const loginUser = async (email: string, password: string) => {
     throw new Error('JWT secret not configured');
   }
 
-  const token = jwt.sign({ userId: user.id }, secret, {
-    expiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
-  });
+  const options: SignOptions = {
+    expiresIn: (process.env.JWT_EXPIRES_IN ?? '7d') as SignOptions['expiresIn'],
+  };
+
+  const token = jwt.sign(
+    { userId: user.id },
+    secret,
+    options,
+  );
 
   return { user, token };
 };
