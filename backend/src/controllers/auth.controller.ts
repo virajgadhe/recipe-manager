@@ -121,6 +121,9 @@ export const getCurrentUser = async (req: AuthRequest, res: Response) => {
       });
     }
 
+    if (!req.userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
     });
