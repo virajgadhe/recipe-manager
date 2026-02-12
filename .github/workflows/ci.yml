@@ -13,6 +13,11 @@ jobs:
     name: Backend Checks
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: "postgresql://user:password@localhost:5432/testdb"
+      JWT_SECRET: "testsecret"
+      JWT_EXPIRES_IN: "7d"
+
     defaults:
       run:
         working-directory: backend
