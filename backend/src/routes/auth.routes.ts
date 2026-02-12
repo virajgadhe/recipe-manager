@@ -9,9 +9,9 @@ import { authenticate } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-router.post('/auth/register', register);
-router.post('/auth/login', login);
-router.post('/auth/logout', logout);
-router.get('/auth/me', authenticate, getCurrentUser);
+router.post('/register', register);
+router.post('/login', login);
+router.post('/logout', logout);
+router.get('/me', authenticate, getCurrentUser);
 
 export default router;
