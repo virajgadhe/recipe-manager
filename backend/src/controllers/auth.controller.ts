@@ -49,7 +49,7 @@ export const register = async (req: Request, res: Response) => {
       email: user.email,
       createdAt: user.createdAt,
     });
-  } catch (error) {
+  } catch (_error) {
     return res.status(500).json({
       message: 'Failed to register user',
     });
@@ -95,7 +95,7 @@ export const login = async (req: Request, res: Response) => {
     return res.json({
       token,
     });
-  } catch (error) {
+  } catch (_error) {
     return res.status(500).json({
       message: 'Login failed',
     });
@@ -134,7 +134,7 @@ export const getCurrentUser = async (req: AuthRequest, res: Response) => {
       email: user.email,
       createdAt: user.createdAt,
     });
-  } catch (error) {
+  } catch (_error) {
     return res.status(500).json({
       message: 'Failed to fetch user',
     });
