@@ -7,9 +7,8 @@
 
 generator client {
   provider   = "prisma-client-js"
-  engineType = "binary"
+  engineType = "library"
 }
-
 
 datasource db {
   provider = "postgresql"
