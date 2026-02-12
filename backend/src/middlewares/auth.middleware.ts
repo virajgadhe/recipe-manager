@@ -8,7 +8,7 @@ export type AuthRequest = Request & {
 export const authenticate = (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Response | void => {
   const authHeader = req.headers.authorization;
 
