@@ -13,6 +13,7 @@ datasource db {
   provider = "postgresql"
 }
 
+
 enum RecipeStatus {
   DRAFT
   PUBLISHED
