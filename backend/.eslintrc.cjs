@@ -15,4 +15,12 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   rules: {},
+  overrides: [
+    {
+      files: ['*.config.js', 'jest.config.js'],
+      rules: {
+        '@typescript-eslint/no-require-imports': 'off',
+      },
+    },
+  ],
 };
