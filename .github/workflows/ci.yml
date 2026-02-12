@@ -13,9 +13,28 @@ jobs:
     name: Backend Checks
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: reciepe_user
+          POSTGRES_PASSWORD: strongpassword
+          POSTGRES_DB: recipe_manager
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     defaults:
       run:
         working-directory: backend
+
+    env:
+      DATABASE_URL: postgresql://reciepe_user:strongpassword@localhost:5432/recipe_manager
+      JWT_SECRET: supersecretkey
 
     steps:
       - name: Checkout repository
@@ -28,6 +47,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Run Migrations
+        run: npx prisma migrate deploy
 
       - name: Run ESLint
         run: npm run lint
