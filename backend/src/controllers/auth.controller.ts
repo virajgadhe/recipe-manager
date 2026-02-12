@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { prisma } from '../lib/prisma';
 import { JWT_SECRET } from '../config/env';
 import { AuthRequest } from '../middlewares/auth.middleware';
@@ -84,9 +84,12 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET as string, {
-      expiresIn: '1h',
-    });
+    const options: SignOptions = {
+      expiresIn: (process.env.JWT_EXPIRES_IN ??
+        '1h') as SignOptions['expiresIn'],
+    };
+
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, options);
 
     return res.json({ token });
   } catch {
@@ -112,6 +115,12 @@ export const logout = async (_req: Request, res: Response) => {
  */
 export const getCurrentUser = async (req: AuthRequest, res: Response) => {
   try {
+    if (!req.userId) {
+      return res.status(401).json({
+        message: 'Unauthorized',
+      });
+    }
+
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
     });
