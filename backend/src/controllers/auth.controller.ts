@@ -13,14 +13,12 @@ export const register = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
 
-    // Validate required fields
     if (!name || !email || !password) {
       return res.status(400).json({
         message: 'Name, email and password are required',
       });
     }
 
-    // Check if email already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -31,10 +29,8 @@ export const register = async (req: Request, res: Response) => {
       });
     }
 
-    // Hash password
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Create user
     const user = await prisma.user.create({
       data: {
         name,
@@ -49,7 +45,7 @@ export const register = async (req: Request, res: Response) => {
       email: user.email,
       createdAt: user.createdAt,
     });
-  } catch (_error) {
+  } catch {
     return res.status(500).json({
       message: 'Failed to register user',
     });
@@ -92,10 +88,8 @@ export const login = async (req: Request, res: Response) => {
       expiresIn: '1h',
     });
 
-    return res.json({
-      token,
-    });
-  } catch (_error) {
+    return res.json({ token });
+  } catch {
     return res.status(500).json({
       message: 'Login failed',
     });
@@ -134,7 +128,7 @@ export const getCurrentUser = async (req: AuthRequest, res: Response) => {
       email: user.email,
       createdAt: user.createdAt,
     });
-  } catch (_error) {
+  } catch {
     return res.status(500).json({
       message: 'Failed to fetch user',
     });
