@@ -67,3 +67,5 @@ model Like {
 
   @@unique([userId, recipeId])
 }
+
+export const prisma = new PrismaClient();
