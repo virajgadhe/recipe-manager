@@ -9,6 +9,8 @@ export const createRecipe = async (
   next: NextFunction,
 ) => {
   try {
+    console.log('REQ BODY:', req.body); // 👈 add this
+
     const userId = req.userId!;
 
     const validatedData = recipeSchema.parse(req.body);

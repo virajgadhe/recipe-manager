@@ -8,10 +8,11 @@ import {
 } from './recipe.controller';
 
 const router = Router();
+console.log('Recipe routes file loaded');
 
-router.post('/', authMiddleware, createRecipe);
-router.get('/my-recipes', authMiddleware, getMyRecipes);
-router.put('/:id', authMiddleware, updateRecipe);
-router.delete('/:id', authMiddleware, deleteRecipe);
+router.post('/', authenticate, createRecipe);
+router.get('/my-recipes', authenticate, getMyRecipes);
+router.put('/:id', authenticate, updateRecipe);
+router.delete('/:id', authenticate, deleteRecipe);
 
 export default router;
