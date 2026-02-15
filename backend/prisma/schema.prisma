@@ -45,12 +45,13 @@ model Recipe {
 }
 
 model Ingredient {
-  id       String @id @default(uuid())
-  name     String
-  quantity String
-  recipeId String
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  id        String  @id @default(uuid())
+  name      String
+  quantity  String
+  recipeId  String
+  recipe    Recipe  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
 }
+
 
 model Category {
   id      String   @id @default(uuid())
@@ -67,5 +68,3 @@ model Like {
 
   @@unique([userId, recipeId])
 }
-
-export const prisma = new PrismaClient();
