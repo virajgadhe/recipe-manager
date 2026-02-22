@@ -1,55 +1,135 @@
 import { prisma } from '../lib/prisma';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthRequest } from '../middlewares/auth.middleware';
 
-// ADD INGREDIENT
+type IngredientBody = {
+  name: string;
+  quantity: string;
+};
+
 export const addIngredient = async (
-  req: Request<
-    { recipeId: string },
-    unknown,
-    { name: string; quantity: string }
-  >,
+  req: AuthRequest & {
+    params: { recipeId: string };
+    body: IngredientBody;
+  },
   res: Response,
 ) => {
-  const { recipeId } = req.params;
-  const { name, quantity } = req.body;
+  try {
+    if (!req.userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
 
-  const ingredient = await prisma.ingredient.create({
-    data: {
-      name,
-      quantity,
-      recipeId,
-    },
-  });
+    const { recipeId } = req.params;
+    const { name, quantity } = req.body;
 
-  res.status(201).json(ingredient);
+    // 🔐 Ownership check
+    const recipe = await prisma.recipe.findFirst({
+      where: {
+        id: recipeId,
+        authorId: req.userId,
+      },
+    });
+
+    if (!recipe) {
+      return res.status(403).json({
+        message: 'You are not allowed to modify this recipe',
+      });
+    }
+
+    const ingredient = await prisma.ingredient.create({
+      data: { name, quantity, recipeId },
+    });
+
+    return res.status(201).json(ingredient);
+  } catch (error) {
+    console.error('Error adding ingredient:', error);
+    return res.status(500).json({ message: 'Failed to add ingredient' });
+  }
 };
 
-// UPDATE INGREDIENT
 export const updateIngredient = async (
-  req: Request<{ id: string }, unknown, { name: string; quantity: string }>,
+  req: AuthRequest & {
+    params: { id: string };
+    body: IngredientBody;
+  },
   res: Response,
 ) => {
-  const { id } = req.params;
-  const { name, quantity } = req.body;
+  try {
+    if (!req.userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
 
-  const updated = await prisma.ingredient.update({
-    where: { id },
-    data: { name, quantity },
-  });
+    const { id } = req.params;
+    const { name, quantity } = req.body;
 
-  res.json(updated);
+    const ingredient = await prisma.ingredient.findUnique({
+      where: { id },
+      include: { recipe: true },
+    });
+
+    if (!ingredient) {
+      return res.status(404).json({
+        message: 'Ingredient not found',
+      });
+    }
+
+    // 🔐 Ownership validation
+    if (ingredient.recipe.authorId !== req.userId) {
+      return res.status(403).json({
+        message: 'You are not allowed to update this ingredient',
+      });
+    }
+
+    const updated = await prisma.ingredient.update({
+      where: { id },
+      data: { name, quantity },
+    });
+
+    return res.json(updated);
+  } catch (error) {
+    console.error('Error updating ingredient:', error);
+    return res.status(500).json({ message: 'Failed to update ingredient' });
+  }
 };
 
-// DELETE INGREDIENT
 export const deleteIngredient = async (
-  req: Request<{ id: string }>,
+  req: AuthRequest & {
+    params: { id: string };
+  },
   res: Response,
 ) => {
-  const { id } = req.params;
+  try {
+    if (!req.userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
 
-  await prisma.ingredient.delete({
-    where: { id },
-  });
+    const { id } = req.params;
 
-  res.status(204).send();
+    const ingredient = await prisma.ingredient.findUnique({
+      where: { id },
+      include: { recipe: true },
+    });
+
+    if (!ingredient) {
+      return res.status(404).json({
+        message: 'Ingredient not found',
+      });
+    }
+
+    // 🔐 Ownership validation
+    if (ingredient.recipe.authorId !== req.userId) {
+      return res.status(403).json({
+        message: 'You are not allowed to delete this ingredient',
+      });
+    }
+
+    await prisma.ingredient.delete({
+      where: { id },
+    });
+
+    return res.status(204).send();
+  } catch (error) {
+    console.error('Error deleting ingredient:', error);
+    return res.status(500).json({ message: 'Failed to delete ingredient' });
+  }
 };

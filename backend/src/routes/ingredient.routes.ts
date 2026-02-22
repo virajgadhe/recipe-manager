@@ -4,10 +4,12 @@ import {
   updateIngredient,
   deleteIngredient,
 } from '../controllers/ingredient.controller';
+import { authenticate } from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
-// REMOVE extra "/recipes"
+router.use(authenticate);
+
 router.post('/:recipeId/ingredients', addIngredient);
 router.put('/ingredients/:id', updateIngredient);
 router.delete('/ingredients/:id', deleteIngredient);
