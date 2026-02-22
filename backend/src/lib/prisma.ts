@@ -5,6 +5,7 @@ import { Pool } from 'pg';
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL not defined');
 }
+console.log('Runtime DATABASE_URL:', process.env.DATABASE_URL);
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
