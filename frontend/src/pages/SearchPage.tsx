@@ -75,7 +75,7 @@ const SearchPage = () => {
         <div className="text-center">
           {' '}
           <h2 className="text-2xl font-bold text-gray-900">
-            Start Searching +{' '}
+            Start Searching {' '}
           </h2>{' '}
         </div>
 
