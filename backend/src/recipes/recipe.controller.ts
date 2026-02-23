@@ -2,6 +2,7 @@ import { Response, NextFunction } from 'express';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import * as recipeService from './recipe.service';
 import { recipeSchema } from './recipe.validation';
+import { Request } from 'express';
 
 export const createRecipe = async (
   req: AuthRequest,
@@ -74,6 +75,80 @@ export const deleteRecipe = async (
     await recipeService.deleteRecipe(recipeId, userId);
 
     res.json({ message: 'Recipe deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getPublishedRecipes = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const recipes = await recipeService.getPublishedRecipes();
+    res.json(recipes);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getRecipeById = async (
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.params;
+
+    const recipe = await recipeService.getPublishedRecipeById(id);
+
+    if (!recipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    res.json(recipe);
+  } catch (error) {
+    next(error);
+  }
+};
+export const getPopularRecipes = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const recipes = await recipeService.getPopularRecipes();
+    res.json(recipes);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getRecentRecipes = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const recipes = await recipeService.getRecentRecipes();
+    res.json(recipes);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const searchRecipes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const query = req.query.q as string;
+
+    const recipes = await recipeService.searchRecipes(query);
+
+    res.json(recipes);
   } catch (error) {
     next(error);
   }

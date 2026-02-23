@@ -32,7 +32,7 @@ model User {
 model Recipe {
   id          String       @id @default(uuid())
   title       String
-  description Json
+  description String
   status      RecipeStatus @default(DRAFT)
   publishedAt DateTime?
   authorId    String

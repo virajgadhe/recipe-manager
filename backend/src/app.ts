@@ -4,8 +4,16 @@ import authRoutes from './routes/auth.routes';
 import recipeRoutes from './recipes/recipe.routes';
 import ingredientRoutes from './routes/ingredient.routes';
 import categoryRoutes from './routes/category.routes';
+import cors from 'cors';
 
 const app = express();
+
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use('/api', healthRoute);
 app.use('/api/auth', authRoutes);

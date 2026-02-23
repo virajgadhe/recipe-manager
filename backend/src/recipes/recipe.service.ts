@@ -1,9 +1,8 @@
 import { prisma } from '../lib/prisma';
-import { Prisma } from '@prisma/client';
 
 interface RecipeInput {
   title: string;
-  description: Prisma.InputJsonValue;
+  description: string;
   categoryId: string;
   ingredients: {
     name: string;
@@ -97,5 +96,94 @@ export const deleteRecipe = async (recipeId: string, userId: string) => {
 
   await prisma.recipe.delete({
     where: { id: recipeId },
+  });
+};
+
+export const getPublishedRecipes = async () => {
+  return prisma.recipe.findMany({
+    where: {
+      status: 'PUBLISHED',
+      publishedAt: { not: null },
+    },
+    include: {
+      ingredients: true,
+      category: true,
+      _count: { select: { likes: true } },
+    },
+  });
+};
+
+export const getPublishedRecipeById = async (id: string) => {
+  return prisma.recipe.findFirst({
+    where: {
+      id,
+      status: 'PUBLISHED',
+    },
+    include: {
+      ingredients: true,
+      category: true,
+    },
+  });
+};
+
+export const getPopularRecipes = async () => {
+  return prisma.recipe.findMany({
+    where: {
+      status: 'PUBLISHED',
+      publishedAt: { not: null },
+    },
+    include: {
+      ingredients: true,
+      category: true,
+      _count: { select: { likes: true } },
+    },
+    orderBy: {
+      likes: { _count: 'desc' },
+    },
+    take: 10,
+  });
+};
+
+export const getRecentRecipes = async () => {
+  return prisma.recipe.findMany({
+    where: {
+      status: 'PUBLISHED',
+      publishedAt: { not: null },
+    },
+    include: {
+      ingredients: true,
+      category: true,
+    },
+    orderBy: {
+      publishedAt: 'desc',
+    },
+    take: 10,
+  });
+};
+
+export const searchRecipes = async (query: string) => {
+  if (!query || !query.trim()) {
+    return [];
+  }
+
+  return prisma.recipe.findMany({
+    where: {
+      status: 'PUBLISHED',
+      publishedAt: { not: null },
+      OR: [
+        { title: { contains: query, mode: 'insensitive' } },
+        { description: { contains: query, mode: 'insensitive' } },
+        {
+          ingredients: {
+            some: { name: { contains: query, mode: 'insensitive' } },
+          },
+        },
+        { category: { name: { contains: query, mode: 'insensitive' } } },
+      ],
+    },
+    include: {
+      ingredients: true,
+      category: true,
+    },
   });
 };
