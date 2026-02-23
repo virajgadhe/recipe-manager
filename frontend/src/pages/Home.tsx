@@ -19,18 +19,27 @@ const Home = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    Promise.all([
-      getPopularRecipes(),
-      getRecentRecipes(),
-      getCategories(),
-    ]).then(([pop, rec, cat]) => {
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const [pop, rec, cat] = await Promise.all([
+        getPopularRecipes(),
+        getRecentRecipes(),
+        getCategories(),
+      ]);
+
       setPopular(pop);
       setRecent(rec);
       setCategories(cat);
+    } catch (error) {
+      console.error('Failed to load home data:', error);
+    } finally {
       setLoading(false);
-    });
-  }, []);
+    }
+  };
+
+  fetchData();
+}, []);
 
   return (
     <div className="bg-gray-50">
