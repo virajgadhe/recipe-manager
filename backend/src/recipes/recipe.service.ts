@@ -1,9 +1,8 @@
 import { prisma } from '../lib/prisma';
-import { Prisma } from '@prisma/client';
 
 interface RecipeInput {
   title: string;
-  description: Prisma.InputJsonValue;
+  description: string;
   categoryId: string;
   ingredients: {
     name: string;
@@ -173,6 +172,7 @@ export const searchRecipes = async (query: string) => {
       publishedAt: { not: null },
       OR: [
         { title: { contains: query, mode: 'insensitive' } },
+        { description: { contains: query, mode: 'insensitive' } },
         {
           ingredients: {
             some: { name: { contains: query, mode: 'insensitive' } },
