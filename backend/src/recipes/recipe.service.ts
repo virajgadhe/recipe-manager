@@ -102,7 +102,10 @@ export const deleteRecipe = async (recipeId: string, userId: string) => {
 
 export const getPublishedRecipes = async () => {
   return prisma.recipe.findMany({
-    where: { status: 'PUBLISHED' },
+    where: {
+      status: 'PUBLISHED',
+      publishedAt: { not: null },
+    },
     include: {
       ingredients: true,
       category: true,
@@ -126,7 +129,10 @@ export const getPublishedRecipeById = async (id: string) => {
 
 export const getPopularRecipes = async () => {
   return prisma.recipe.findMany({
-    where: { status: 'PUBLISHED' },
+    where: {
+      status: 'PUBLISHED',
+      publishedAt: { not: null },
+    },
     include: {
       ingredients: true,
       category: true,
@@ -141,7 +147,10 @@ export const getPopularRecipes = async () => {
 
 export const getRecentRecipes = async () => {
   return prisma.recipe.findMany({
-    where: { status: 'PUBLISHED' },
+    where: {
+      status: 'PUBLISHED',
+      publishedAt: { not: null },
+    },
     include: {
       ingredients: true,
       category: true,
@@ -154,9 +163,14 @@ export const getRecentRecipes = async () => {
 };
 
 export const searchRecipes = async (query: string) => {
+  if (!query || !query.trim()) {
+    return [];
+  }
+
   return prisma.recipe.findMany({
     where: {
       status: 'PUBLISHED',
+      publishedAt: { not: null },
       OR: [
         { title: { contains: query, mode: 'insensitive' } },
         {
