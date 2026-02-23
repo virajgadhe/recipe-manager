@@ -111,9 +111,15 @@ const CategoryPage = () => {
         {/* Recipe Grid or Empty State */}
         {recipes.length > 0 ? (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
-            ))}
+            {recipes.length > 0 ? (
+              <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                {recipes.map((recipe) => (
+                  <RecipeCard key={recipe.id} recipe={recipe} />
+                ))}
+              </div>
+            ) : (
+              <EmptyState />
+            )}
           </div>
         ) : (
           <EmptyState />
