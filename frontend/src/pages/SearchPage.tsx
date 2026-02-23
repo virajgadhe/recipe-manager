@@ -58,20 +58,30 @@ const SearchPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
-        {/* Page Header */}
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-widest text-indigo-500 mb-1">
-            Discover
-          </p>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+      {/* Header */}
+      <section className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h1 className="text-4xl font-extrabold tracking-tight">
             Search Recipes
           </h1>
-          <div className="mt-2 h-1 w-14 bg-indigo-500 rounded-full" />
+          <p className="text-indigo-200 mt-3">
+            Find recipes by title, ingredients, or category.
+          </p>
+        </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-6 py-16 space-y-12">
+        {/* Page Header */}
+        <div className="text-center">
+          {' '}
+          <h2 className="text-2xl font-bold text-gray-900">
+            Start Searching +{' '}
+          </h2>{' '}
         </div>
 
         {/* Search Bar */}
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col sm:flex-row gap-4 max-w-3xl mx-auto">
+          {' '}
           <div className="relative flex-1">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
               <svg
@@ -89,10 +99,10 @@ const SearchPage = () => {
               </svg>
             </div>
             <input
-              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 bg-white
-                         text-sm text-gray-900 placeholder-gray-400 shadow-sm
+              className="w-full pl-10 pr-4 py-4 rounded-full border border-gray-200 bg-white
+                         text-sm text-gray-900 placeholder-gray-400 shadow
                          focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent
-                         transition duration-150"
+                         transition"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -102,10 +112,10 @@ const SearchPage = () => {
           <button
             onClick={handleSearch}
             disabled={loading}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl
-                       bg-indigo-600 text-white text-sm font-semibold shadow-sm
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full
+                       bg-indigo-600 text-white text-sm font-semibold shadow-lg
                        hover:bg-indigo-700 active:scale-95 disabled:opacity-60
-                       disabled:cursor-not-allowed transition-all duration-150"
+                       transition"
           >
             {loading ? (
               <>

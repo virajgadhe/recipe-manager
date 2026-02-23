@@ -82,18 +82,26 @@ const CategoryPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* Page Header */}
-        <div className="mb-10">
-          <p className="text-xs font-semibold uppercase tracking-widest text-indigo-500 mb-1">
-            Browse
+      {/* Header Section */}
+      <section className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-16">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-indigo-200 uppercase tracking-widest text-xs mb-2">
+            Category
           </p>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-            Category Recipes
+          <h1 className="text-4xl font-extrabold tracking-tight">
+            Explore Recipes
           </h1>
-          <div className="mt-2 h-1 w-14 bg-indigo-500 rounded-full" />
+        </div>
+      </section>
+      {/* Content Container */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl font-bold text-gray-900">
+            Recipes in this Category
+          </h2>
           {recipes.length > 0 && (
-            <p className="mt-3 text-sm text-gray-500">
+            <p className="mt-3 text-gray-500">
+              {' '}
               {recipes.length} {recipes.length === 1 ? 'recipe' : 'recipes'}{' '}
               found
             </p>
@@ -102,7 +110,7 @@ const CategoryPage = () => {
 
         {/* Recipe Grid or Empty State */}
         {recipes.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {recipes.map((recipe) => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
