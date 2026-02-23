@@ -6,7 +6,6 @@ import {
 
 const router = express.Router();
 
-// REMOVE extra "categories" prefix
 router.get('/', getCategories);
 router.get('/:id/recipes', getRecipesByCategory);
 

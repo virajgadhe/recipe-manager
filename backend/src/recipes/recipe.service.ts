@@ -99,3 +99,77 @@ export const deleteRecipe = async (recipeId: string, userId: string) => {
     where: { id: recipeId },
   });
 };
+
+export const getPublishedRecipes = async () => {
+  return prisma.recipe.findMany({
+    where: { status: 'PUBLISHED' },
+    include: {
+      ingredients: true,
+      category: true,
+      _count: { select: { likes: true } },
+    },
+  });
+};
+
+export const getPublishedRecipeById = async (id: string) => {
+  return prisma.recipe.findFirst({
+    where: {
+      id,
+      status: 'PUBLISHED',
+    },
+    include: {
+      ingredients: true,
+      category: true,
+    },
+  });
+};
+
+export const getPopularRecipes = async () => {
+  return prisma.recipe.findMany({
+    where: { status: 'PUBLISHED' },
+    include: {
+      ingredients: true,
+      category: true,
+      _count: { select: { likes: true } },
+    },
+    orderBy: {
+      likes: { _count: 'desc' },
+    },
+    take: 10,
+  });
+};
+
+export const getRecentRecipes = async () => {
+  return prisma.recipe.findMany({
+    where: { status: 'PUBLISHED' },
+    include: {
+      ingredients: true,
+      category: true,
+    },
+    orderBy: {
+      publishedAt: 'desc',
+    },
+    take: 10,
+  });
+};
+
+export const searchRecipes = async (query: string) => {
+  return prisma.recipe.findMany({
+    where: {
+      status: 'PUBLISHED',
+      OR: [
+        { title: { contains: query, mode: 'insensitive' } },
+        {
+          ingredients: {
+            some: { name: { contains: query, mode: 'insensitive' } },
+          },
+        },
+        { category: { name: { contains: query, mode: 'insensitive' } } },
+      ],
+    },
+    include: {
+      ingredients: true,
+      category: true,
+    },
+  });
+};

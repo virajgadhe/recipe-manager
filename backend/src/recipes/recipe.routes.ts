@@ -5,10 +5,20 @@ import {
   getMyRecipes,
   updateRecipe,
   deleteRecipe,
+  getPublishedRecipes,
+  getRecipeById,
+  getPopularRecipes,
+  getRecentRecipes,
+  searchRecipes,
 } from './recipe.controller';
 
 const router = Router();
-console.log('Recipe routes file loaded');
+
+router.get('/popular', getPopularRecipes);
+router.get('/recent', getRecentRecipes);
+router.get('/search', searchRecipes);
+router.get('/', getPublishedRecipes);
+router.get('/:id', getRecipeById);
 
 router.post('/', authenticate, createRecipe);
 router.get('/my-recipes', authenticate, getMyRecipes);
