@@ -17,9 +17,9 @@ interface RecipeDetailType {
 
 const LoadingSkeleton = () => (
   <div className="min-h-screen bg-gray-50">
-    <div className="max-w-3xl mx-auto px-6 py-16 space-y-10 animate-pulse">
-      <div className="h-10 bg-gray-200 rounded w-2/3" />
-      <div className="bg-white rounded-2xl border h-40" />
+    <div className="max-w-3xl px-6 py-16 mx-auto space-y-10 animate-pulse">
+      <div className="w-2/3 h-10 bg-gray-200 rounded" />
+      <div className="h-40 bg-white border rounded-2xl" />
       <div className="h-24 bg-gray-100 rounded-2xl" />
     </div>
   </div>
@@ -58,16 +58,16 @@ const RecipeDetail = () => {
 
   if (notFound || !recipe) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-center px-6">
-        <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
+      <div className="flex flex-col items-center justify-center min-h-screen px-6 text-center bg-gray-50">
+        <h1 className="mb-4 text-4xl font-extrabold text-gray-800">
           404 - Recipe Not Found
         </h1>
-        <p className="text-gray-500 mb-8 max-w-md">
+        <p className="max-w-md mb-8 text-gray-500">
           The recipe you are looking for does not exist or is not published.
         </p>
         <Link
           to="/"
-          className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl shadow hover:bg-indigo-700 transition"
+          className="px-6 py-3 font-semibold text-white transition bg-indigo-600 shadow rounded-xl hover:bg-indigo-700"
         >
           Back to Home
         </Link>
@@ -77,19 +77,19 @@ const RecipeDetail = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-3xl mx-auto px-6 py-16 space-y-14">
+      <div className="max-w-3xl px-6 py-16 mx-auto space-y-14">
         {/* Title Section */}
         <div className="space-y-4">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight">
+          <h1 className="text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl">
             {recipe.title}
           </h1>
-          <div className="h-1 w-16 bg-indigo-600 rounded-full" />
+          <div className="w-16 h-1 bg-indigo-600 rounded-full" />
         </div>
 
         {/* Ingredients Section */}
         <section>
-          <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-8">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">
+          <div className="p-8 bg-white border border-gray-200 shadow-sm rounded-2xl">
+            <h2 className="mb-6 text-xl font-bold text-gray-800">
               Ingredients
             </h2>
 
@@ -98,32 +98,28 @@ const RecipeDetail = () => {
                 {recipe.ingredients.map((ing) => (
                   <li
                     key={ing.id}
-                    className="flex items-center justify-between bg-gray-50 px-4 py-3 rounded-xl border border-gray-100"
+                    className="flex items-center justify-between px-4 py-3 border border-gray-100 bg-gray-50 rounded-xl"
                   >
                     <span className="font-medium text-gray-800">
                       {ing.name}
                     </span>
-                    <span className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full border">
+                    <span className="px-3 py-1 text-sm text-gray-500 bg-white border rounded-full">
                       {ing.quantity}
                     </span>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-gray-400 italic">No ingredients listed.</p>
+              <p className="italic text-gray-400">No ingredients listed.</p>
             )}
           </div>
         </section>
 
         {/* Description Section */}
         <section>
-          <h2 className="text-xl font-bold text-gray-800 mb-6">Description</h2>
+          <h2 className="mb-6 text-xl font-bold text-gray-800">Description</h2>
           <div
-            className="prose prose-gray sm:prose-lg max-w-none
-                       bg-white border border-gray-200 rounded-2xl shadow-sm p-8
-                       prose-headings:font-semibold prose-headings:text-gray-900
-                       prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline
-                       prose-li:marker:text-indigo-500"
+            className="p-8 prose bg-white border border-gray-200 shadow-sm prose-gray sm:prose-lg max-w-none rounded-2xl prose-headings:font-semibold prose-headings:text-gray-900 prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline prose-li:marker:text-indigo-500"
             dangerouslySetInnerHTML={{ __html: recipe.description }}
           />
         </section>
