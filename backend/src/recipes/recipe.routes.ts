@@ -10,6 +10,7 @@ import {
   getPopularRecipes,
   getRecentRecipes,
   searchRecipes,
+  getRecipeForEdit,
 } from './recipe.controller';
 
 const router = Router();
@@ -18,6 +19,7 @@ router.get('/popular', getPopularRecipes);
 router.get('/recent', getRecentRecipes);
 router.get('/search', searchRecipes);
 router.get('/my-recipes', authenticate, getMyRecipes);
+router.get('/:id/edit', authenticate, getRecipeForEdit);
 router.get('/', getPublishedRecipes);
 router.get('/:id', getRecipeById);
 
