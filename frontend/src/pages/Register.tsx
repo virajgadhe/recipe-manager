@@ -22,8 +22,12 @@ export default function Register() {
       await register({ name, email, password });
 
       navigate('/login');
-    } catch {
-      setError('Registration failed. Try again.');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Registration failed.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +67,7 @@ export default function Register() {
           </div>
         </div>
       </div>
-      
+
       {/* RIGHT FORM */}
       <div className="flex items-center justify-center flex-1 px-6 py-12">
         <div className="w-full max-w-md">
