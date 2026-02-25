@@ -4,7 +4,7 @@ export interface IngredientInput {
   quantity: string;
 }
 
-// Full ingredient when returned from backend
+// Full ingredient returned from backend
 export interface Ingredient extends IngredientInput {
   id: string;
 }
@@ -22,14 +22,14 @@ export interface RecipeCategory {
 export interface Recipe {
   id: string;
   title: string;
-  description: {
-    content: string;
-  };
+  description: string;
   status: RecipeStatus;
+  authorId: string;
+  categoryId: string;
   category: RecipeCategory;
   ingredients: Ingredient[];
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 // Payload shape for POST /api/recipes
@@ -43,9 +43,7 @@ export interface CreateRecipePayload {
 // Payload shape for update
 export interface UpdateRecipePayload {
   title?: string;
-  description?: {
-    content: string;
-  };
+  description?: string;
   categoryId?: string;
   ingredients?: IngredientInput[];
 }

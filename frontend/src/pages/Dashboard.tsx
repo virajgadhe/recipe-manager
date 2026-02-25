@@ -19,8 +19,12 @@ export default function Dashboard() {
       setLoading(true);
       const data = await getMyRecipes();
       setRecipes(data);
-    } catch {
-      setError('Failed to load your recipes.');
+     } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Failed to load your recipes.');
+      }
     } finally {
       setLoading(false);
     }
