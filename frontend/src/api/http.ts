@@ -11,15 +11,21 @@ export async function http<T>(
   const { auth = false, headers, ...rest } = options;
 
   const finalHeaders: Record<string, string> = {
-    'Content-Type': 'application/json',
     ...(headers as Record<string, string>),
   };
 
+  if (rest.body) {
+    finalHeaders['Content-Type'] = 'application/json';
+  }
+
   if (auth) {
     const token = localStorage.getItem('token');
-    if (token) {
-      finalHeaders['Authorization'] = `Bearer ${token}`;
+
+    if (!token) {
+      throw new Error('Authentication token not found.');
     }
+
+    finalHeaders['Authorization'] = `Bearer ${token}`;
   }
 
   const response = await fetch(`${API_URL}${endpoint}`, {
@@ -27,11 +33,21 @@ export async function http<T>(
     ...rest,
   });
 
-  const data = await response.json().catch(() => null);
+  let data: unknown = null;
 
-  if (!response.ok) {
-    throw new Error(data?.message || 'Something went wrong');
+  try {
+    data = await response.json();
+  } catch {
+    // ignore JSON parse error
   }
 
-  return data;
+  if (!response.ok) {
+    if (typeof data === 'object' && data !== null && 'message' in data) {
+      throw new Error(String((data as { message: unknown }).message));
+    }
+
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+
+  return data as T;
 }

@@ -101,9 +101,8 @@ export default function CreateRecipe() {
       (ing) => ing.name.trim() && ing.quantity.trim(),
     );
 
-    const description = {
-      content: editor?.getHTML() ?? '',
-    };
+    const description = editor?.getHTML() ?? '';
+
     try {
       setLoading(true);
 

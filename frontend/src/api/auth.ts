@@ -1,5 +1,5 @@
 const BASE_URL = import.meta.env.VITE_API_URL;
-const API = `${BASE_URL}/auth`;
+const API = `${BASE_URL}/api/auth`;
 
 export const register = async (data: {
   name: string;
@@ -15,7 +15,7 @@ export const register = async (data: {
   const result = await res.json();
 
   if (!res.ok) {
-    throw new Error(result.message || 'Registration failed');
+    throw new Error(result?.message || 'Registration failed');
   }
 
   return result;
@@ -28,15 +28,12 @@ export const login = async (data: { email: string; password: string }) => {
     body: JSON.stringify(data),
   });
 
-  //if (!res.ok) throw new Error('Login failed');
-
   const result = await res.json();
 
   if (!res.ok) {
-    throw new Error(result.message || 'Login failed');
+    throw new Error(result?.message || 'Login failed');
   }
 
-  // 🔑 store token
   localStorage.setItem('token', result.token);
 
   return result.token;
@@ -48,7 +45,6 @@ export const logout = () => {
 
 export const getMe = async () => {
   const token = localStorage.getItem('token');
-
   if (!token) return null;
 
   const res = await fetch(`${API}/me`, {
