@@ -1,6 +1,6 @@
- import { createContext, useContext, useEffect, useState } from "react";
-import type { ReactNode } from "react";
-import { getMe, logout } from "../api/auth";
+import { createContext, useContext, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import { getMe, logout } from '../api/auth';
 
 type User = {
   id: string;
@@ -22,10 +22,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getMe().then((u) => {
-      setUser(u);
-      setLoading(false);
-    });
+    const initializeAuth = async () => {
+      try {
+        const user = await getMe();
+
+        if (!user) {
+          localStorage.removeItem('token');
+        }
+
+        setUser(user);
+      } catch {
+        localStorage.removeItem('token');
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeAuth();
   }, []);
 
   const logoutUser = () => {
