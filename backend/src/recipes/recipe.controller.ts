@@ -10,7 +10,7 @@ export const createRecipe = async (
   next: NextFunction,
 ) => {
   try {
-    console.log('REQ BODY:', req.body); // 👈 add this
+    console.log('REQ BODY:', req.body); 
 
     const userId = req.userId!;
 

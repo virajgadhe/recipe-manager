@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma';
+import { Prisma } from '@prisma/client';
 
 interface RecipeInput {
   title: string;
@@ -68,7 +69,7 @@ export const updateRecipe = async (
 ) => {
   await verifyOwnership(recipeId, userId);
 
-  return prisma.$transaction(async (tx) => {
+  return prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     await tx.ingredient.deleteMany({
       where: { recipeId },
     });
@@ -80,7 +81,10 @@ export const updateRecipe = async (
         description: data.description,
         categoryId: data.categoryId,
         ingredients: {
-          create: data.ingredients,
+          create: data.ingredients.map((ingredient) => ({
+            name: ingredient.name,
+            quantity: ingredient.quantity,
+          })),
         },
       },
       include: {
@@ -184,6 +188,22 @@ export const searchRecipes = async (query: string) => {
     include: {
       ingredients: true,
       category: true,
+    },
+  });
+};
+
+export const getRecipeByIdForUser = async (
+  recipeId: string,
+  userId: string,
+) => {
+  return prisma.recipe.findFirst({
+    where: {
+      id: recipeId,
+      authorId: userId,
+    },
+    include: {
+      category: true,
+      ingredients: true,
     },
   });
 };
