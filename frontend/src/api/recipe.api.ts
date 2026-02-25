@@ -73,3 +73,10 @@ export function updateRecipeStatus(
     body: JSON.stringify({ status }),
   });
 }
+
+export function getRecipeForEdit(id: string): Promise<Recipe> {
+  return http<Recipe>(`/api/recipes/${id}/edit`, {
+    method: 'GET',
+    auth: true,
+  });
+}

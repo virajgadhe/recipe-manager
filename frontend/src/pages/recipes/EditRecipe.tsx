@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { getRecipeById, updateRecipe } from '../../api/recipe.api';
+import { getRecipeForEdit, updateRecipe } from '../../api/recipe.api';
 import { getCategories } from '../../api/public';
 import { useAuth } from '../../context/AuthContext';
 import type { Recipe, IngredientInput } from '../../types/recipe';
@@ -42,8 +42,7 @@ export default function EditRecipe() {
       if (!id) return;
 
       try {
-        const recipe: Recipe = await getRecipeById(id);
-
+        const recipe: Recipe = await getRecipeForEdit(id);
         // Ownership validation
         if (!user || recipe.authorId !== user.id) {
           navigate('/dashboard');
