@@ -1,4 +1,5 @@
-const API = "http://localhost:4000/api/auth";
+const BASE_URL = import.meta.env.VITE_API_URL;
+const API = `${BASE_URL}/auth`;
 
 export const register = async (data: {
   name: string;
@@ -6,41 +7,47 @@ export const register = async (data: {
   password: string;
 }) => {
   const res = await fetch(`${API}/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
   });
-
-  if (!res.ok) throw new Error("Registration failed");
-  return res.json();
-};
-
-export const login = async (data: {
-  email: string;
-  password: string;
-}) => {
-  const res = await fetch(`${API}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-
-  if (!res.ok) throw new Error("Login failed");
 
   const result = await res.json();
 
+  if (!res.ok) {
+    throw new Error(result.message || 'Registration failed');
+  }
+
+  return result;
+};
+
+export const login = async (data: { email: string; password: string }) => {
+  const res = await fetch(`${API}/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+
+  //if (!res.ok) throw new Error('Login failed');
+
+  const result = await res.json();
+
+  if (!res.ok) {
+    throw new Error(result.message || 'Login failed');
+  }
+
   // 🔑 store token
-  localStorage.setItem("token", result.token);
+  localStorage.setItem('token', result.token);
 
   return result.token;
 };
 
 export const logout = () => {
-  localStorage.removeItem("token");
+  localStorage.removeItem('token');
 };
 
 export const getMe = async () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
 
   if (!token) return null;
 
@@ -50,6 +57,10 @@ export const getMe = async () => {
     },
   });
 
-  if (!res.ok) return null;
+  if (!res.ok) {
+    localStorage.removeItem('token');
+    return null;
+  }
+
   return res.json();
 };

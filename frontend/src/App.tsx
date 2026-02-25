@@ -1,13 +1,15 @@
-import { Routes, Route, Link } from "react-router-dom";
-import Home from "./pages/Home";
-import RecipeDetail from "./pages/RecipeDetail";
-import CategoryPage from "./pages/CategoryPage";
-import SearchPage from "./pages/SearchPage";
-import Navbar from "./components/Navbar";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Dashboard from "./pages/Dashboard";
+import { Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import RecipeDetail from './pages/RecipeDetail';
+import CategoryPage from './pages/CategoryPage';
+import SearchPage from './pages/SearchPage';
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
+import Dashboard from './pages/Dashboard';
+import CreateRecipe from './pages/recipes/CreateRecipe';
+//import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -21,7 +23,14 @@ function App() {
           <Route path="/recipes/:id" element={<RecipeDetail />} />
           <Route path="/categories/:id" element={<CategoryPage />} />
           <Route path="/search" element={<SearchPage />} />
-
+          <Route
+            path="/recipes/new"
+            element={
+              <ProtectedRoute>
+                <CreateRecipe />
+              </ProtectedRoute>
+            }
+          />
           {/* 🔐 Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -36,7 +45,7 @@ function App() {
             }
           />
 
-          {/* ❌ 404 */}
+          {/*  404 */}
           <Route
             path="*"
             element={
