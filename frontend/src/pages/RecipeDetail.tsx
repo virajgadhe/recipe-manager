@@ -1,6 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getRecipeById } from '../api/public';
+import { useAuth } from '../context/AuthContext';
+import { likeRecipe, unlikeRecipe } from '../api/like.api';
 
 interface Ingredient {
   id: string;
@@ -13,6 +15,10 @@ interface RecipeDetailType {
   title: string;
   description: string;
   ingredients: Ingredient[];
+
+  // 👇 added for likes feature
+  _count?: { likes: number };
+  liked?: boolean;
 }
 
 const LoadingSkeleton = () => (
@@ -25,11 +31,16 @@ const LoadingSkeleton = () => (
   </div>
 );
 
-const RecipeDetail = () => {
+export default function RecipeDetail() {
   const { id } = useParams();
+  const { user } = useAuth();
+
   const [recipe, setRecipe] = useState<RecipeDetailType | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+
+  const [likesCount, setLikesCount] = useState(0);
+  const [liked, setLiked] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -38,8 +49,13 @@ const RecipeDetail = () => {
       if (!id) return;
 
       try {
-        const data = await getRecipeById(id);
-        if (mounted) setRecipe(data);
+        const data: RecipeDetailType = await getRecipeById(id);
+
+        if (!mounted) return;
+
+        setRecipe(data);
+        setLikesCount(data._count?.likes ?? 0);
+        setLiked(data.liked ?? false);
       } catch {
         if (mounted) setNotFound(true);
       } finally {
@@ -53,6 +69,24 @@ const RecipeDetail = () => {
       mounted = false;
     };
   }, [id]);
+
+  const toggleLike = async () => {
+    if (!user || !recipe) return;
+
+    try {
+      if (liked) {
+        await unlikeRecipe(recipe.id);
+        setLikesCount((c) => c - 1);
+      } else {
+        await likeRecipe(recipe.id);
+        setLikesCount((c) => c + 1);
+      }
+
+      setLiked(!liked);
+    } catch {
+      alert('Failed to update like');
+    }
+  };
 
   if (loading) return <LoadingSkeleton />;
 
@@ -83,10 +117,29 @@ const RecipeDetail = () => {
           <h1 className="text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl">
             {recipe.title}
           </h1>
+
           <div className="w-16 h-1 bg-indigo-600 rounded-full" />
+
+          {/* ❤️ Likes */}
+          <div className="flex items-center gap-4 mt-4">
+            <button
+              onClick={toggleLike}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition
+                ${
+                  liked
+                    ? 'bg-pink-100 text-pink-600'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }
+              `}
+            >
+              ❤️ {liked ? 'Liked' : 'Like'}
+            </button>
+
+            <span className="text-sm text-gray-500">{likesCount} likes</span>
+          </div>
         </div>
 
-        {/* Ingredients Section */}
+        {/* Ingredients */}
         <section>
           <div className="p-8 bg-white border border-gray-200 shadow-sm rounded-2xl">
             <h2 className="mb-6 text-xl font-bold text-gray-800">
@@ -115,17 +168,16 @@ const RecipeDetail = () => {
           </div>
         </section>
 
-        {/* Description Section */}
+        {/* Description */}
         <section>
           <h2 className="mb-6 text-xl font-bold text-gray-800">Description</h2>
+
           <div
-            className="p-8 prose bg-white border border-gray-200 shadow-sm prose-gray sm:prose-lg max-w-none rounded-2xl prose-headings:font-semibold prose-headings:text-gray-900 prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline prose-li:marker:text-indigo-500"
+            className="p-8 prose bg-white border border-gray-200 shadow-sm prose-gray sm:prose-lg max-w-none rounded-2xl"
             dangerouslySetInnerHTML={{ __html: recipe.description }}
           />
         </section>
       </div>
     </div>
   );
-};
-
-export default RecipeDetail;
+}
