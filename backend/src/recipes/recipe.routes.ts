@@ -25,18 +25,17 @@ router.get('/search', searchRecipes);
 // Authenticated routes
 router.get('/my-recipes', authenticate, getMyRecipes);
 router.get('/:id/edit', authenticate, getRecipeForEdit);
-router.patch('/:id/status', authenticate, updateRecipeStatus);
 
-// Public viewing
-router.get('/', getPublishedRecipes);
-router.patch('/:id/publish', authenticate, publishRecipe);
-router.patch('/:id/unpublish', authenticate, unpublishRecipe);
-router.get('/:id', getRecipeById);
 router.post('/', authenticate, createRecipe);
 router.put('/:id', authenticate, updateRecipe);
 router.delete('/:id', authenticate, deleteRecipe);
 
+// Draft & Publish logic
 router.patch('/:id/publish', authenticate, publishRecipe);
 router.patch('/:id/unpublish', authenticate, unpublishRecipe);
+
+// Public viewing
+router.get('/', getPublishedRecipes);
+router.get('/:id', getRecipeById);
 
 export default router;
