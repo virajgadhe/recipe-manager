@@ -7,11 +7,11 @@ export const ingredientSchema = z.object({
 
 export const recipeSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  description: z.any(),
+  description: z.string().min(1, 'Description is required'),
   categoryId: z.string().uuid('Invalid category ID'),
   ingredients: z
     .array(ingredientSchema)
     .min(1, 'At least one ingredient required'),
 });
 
-export {}; // 👈 ADD THIS
+export {};
