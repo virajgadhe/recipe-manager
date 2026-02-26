@@ -126,30 +126,30 @@ export default function CreateRecipe() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-14 px-6">
+    <div className="min-h-screen px-6 bg-gray-50 py-14">
       <div className="max-w-4xl mx-auto">
         <div className="mb-10">
           <h1 className="text-4xl font-bold text-gray-900">
             Create New Recipe
           </h1>
-          <p className="text-gray-500 mt-2">
+          <p className="mt-2 text-gray-500">
             Your recipe will be saved as a draft.
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-2xl border border-gray-200 shadow-sm p-10 space-y-8"
+          className="p-10 space-y-8 bg-white border border-gray-200 shadow-sm rounded-2xl"
         >
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3">
+            <div className="px-4 py-3 text-sm text-red-600 border border-red-200 bg-red-50 rounded-xl">
               {error}
             </div>
           )}
 
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
               Title *
             </label>
             <input
@@ -163,7 +163,7 @@ export default function CreateRecipe() {
 
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block mb-1 text-sm font-medium text-gray-700">
               Category *
             </label>
             <select
@@ -182,7 +182,7 @@ export default function CreateRecipe() {
 
           {/* Ingredients */}
           <div>
-            <div className="flex justify-between items-center mb-3">
+            <div className="flex items-center justify-between mb-3">
               <label className="text-sm font-medium text-gray-700">
                 Ingredients *
               </label>
@@ -197,7 +197,7 @@ export default function CreateRecipe() {
 
             <div className="space-y-3">
               {ingredients.map((ingredient, index) => (
-                <div key={index} className="flex gap-3 items-center">
+                <div key={index} className="flex items-center gap-3">
                   <input
                     type="text"
                     value={ingredient.name}
@@ -205,7 +205,7 @@ export default function CreateRecipe() {
                       updateIngredient(index, 'name', e.target.value)
                     }
                     placeholder="Ingredient name"
-                    className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2"
+                    className="flex-1 px-4 py-2 border border-gray-200 rounded-xl bg-gray-50"
                   />
                   <input
                     type="text"
@@ -214,13 +214,13 @@ export default function CreateRecipe() {
                       updateIngredient(index, 'quantity', e.target.value)
                     }
                     placeholder="Quantity"
-                    className="w-40 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2"
+                    className="w-40 px-4 py-2 border border-gray-200 rounded-xl bg-gray-50"
                   />
                   {ingredients.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeIngredient(index)}
-                      className="text-red-500 hover:text-red-700 text-lg"
+                      className="text-lg text-red-500 hover:text-red-700"
                     >
                       ×
                     </button>
@@ -232,11 +232,11 @@ export default function CreateRecipe() {
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block mb-2 text-sm font-medium text-gray-700">
               Description
             </label>
 
-            <div className="border border-gray-200 rounded-xl overflow-hidden bg-gray-50">
+            <div className="overflow-hidden border border-gray-200 rounded-xl bg-gray-50">
               <EditorContent editor={editor} />
             </div>
           </div>
@@ -245,9 +245,7 @@ export default function CreateRecipe() {
           <button
             type="submit"
             disabled={loading || !isFormValid}
-            className="w-full py-3 rounded-xl text-white font-semibold 
-            bg-gradient-to-r from-indigo-600 to-purple-600 
-            hover:opacity-95 transition disabled:opacity-60"
+            className="w-full py-3 font-semibold text-white transition rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 disabled:opacity-60"
           >
             {loading ? 'Saving...' : 'Save Recipe'}
           </button>
