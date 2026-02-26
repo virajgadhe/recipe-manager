@@ -174,3 +174,37 @@ export const getRecipeForEdit = async (
     next(error);
   }
 };
+
+export const publishRecipe = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const recipeId = req.params.id as string;
+    const userId = req.userId!;
+
+    const recipe = await recipeService.publishRecipe(recipeId, userId);
+
+    res.json(recipe);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const unpublishRecipe = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const recipeId = req.params.id as string;
+    const userId = req.userId!;
+
+    const recipe = await recipeService.unpublishRecipe(recipeId, userId);
+
+    res.json(recipe);
+  } catch (error) {
+    next(error);
+  }
+};
