@@ -233,3 +233,19 @@ export const getRecipeByIdForUser = async (
     },
   });
 };
+
+export const updateRecipeStatus = async (
+  recipeId: string,
+  userId: string,
+  status: 'DRAFT' | 'PUBLISHED',
+) => {
+  await verifyOwnership(recipeId, userId);
+
+  return prisma.recipe.update({
+    where: { id: recipeId },
+    data: {
+      status,
+      publishedAt: status === 'PUBLISHED' ? new Date() : null,
+    },
+  });
+};
