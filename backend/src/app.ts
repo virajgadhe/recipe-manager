@@ -1,10 +1,11 @@
 import express from 'express';
+import cors from 'cors';
+
 import healthRoute from './routes/health';
 import authRoutes from './routes/auth.routes';
 import recipeRoutes from './recipes/recipe.routes';
 import ingredientRoutes from './routes/ingredient.routes';
 import categoryRoutes from './routes/category.routes';
-import cors from 'cors';
 import userRoutes from './routes/user.routes';
 
 const app = express();
@@ -15,14 +16,25 @@ app.use(
     credentials: true,
   }),
 );
+
 app.use(express.json());
+
+// health
 app.use('/api', healthRoute);
+
+// auth
 app.use('/api/auth', authRoutes);
 
+// categories (public)
 app.use('/api/categories', categoryRoutes);
+
+// recipes
 app.use('/api/recipes', recipeRoutes);
+
+// nested recipe resources (ingredients)
 app.use('/api/recipes', ingredientRoutes);
 
+// user profile
 app.use('/api/users', userRoutes);
 
 export default app;
