@@ -10,7 +10,7 @@ export const createRecipe = async (
   next: NextFunction,
 ) => {
   try {
-    console.log('REQ BODY:', req.body); // 👈 add this
+    console.log('REQ BODY:', req.body);
 
     const userId = req.userId!;
 
@@ -149,6 +149,27 @@ export const searchRecipes = async (
     const recipes = await recipeService.searchRecipes(query);
 
     res.json(recipes);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getRecipeForEdit = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const recipeId = req.params.id as string;
+    const userId = req.userId!;
+
+    const recipe = await recipeService.getRecipeByIdForUser(recipeId, userId);
+
+    if (!recipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    res.json(recipe);
   } catch (error) {
     next(error);
   }

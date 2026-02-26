@@ -9,7 +9,7 @@ import Register from './pages/Register';
 import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import CreateRecipe from './pages/recipes/CreateRecipe';
-//import ProtectedRoute from "./components/ProtectedRoute";
+import EditRecipe from './pages/recipes/EditRecipe';
 
 function App() {
   return (
@@ -31,6 +31,16 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+            <Route
+            path="/recipes/:id/edit"
+            element={
+              <ProtectedRoute>
+                <EditRecipe />
+              </ProtectedRoute>
+            }
+          />
+          
           {/* 🔐 Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
