@@ -36,4 +36,7 @@ router.post('/', authenticate, createRecipe);
 router.put('/:id', authenticate, updateRecipe);
 router.delete('/:id', authenticate, deleteRecipe);
 
+router.patch('/:id/publish', authenticate, publishRecipe);
+router.patch('/:id/unpublish', authenticate, unpublishRecipe);
+
 export default router;
