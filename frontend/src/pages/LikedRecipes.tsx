@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { getLikedRecipes } from "../api/like.api";
-import RecipeCard from "../components/RecipeCard";
-import type { Recipe } from "../components/RecipeCard";
+import { useEffect, useState } from 'react';
+import { getLikedRecipes } from '../api/like.api';
+import RecipeCard from '../components/RecipeCard';
+import type { Recipe } from '../components/RecipeCard';
 
 export default function LikedRecipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -12,7 +12,7 @@ export default function LikedRecipes() {
         const data = await getLikedRecipes();
         setRecipes(data);
       } catch {
-        console.error("Failed to fetch liked recipes");
+        console.error('Failed to fetch liked recipes');
       }
     };
 
