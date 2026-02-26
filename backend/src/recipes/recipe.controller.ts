@@ -174,3 +174,29 @@ export const getRecipeForEdit = async (
     next(error);
   }
 };
+
+export const updateRecipeStatus = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const recipeId = req.params.id as string;
+    const userId = req.userId!;
+    const { status } = req.body;
+
+    if (!['DRAFT', 'PUBLISHED'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
+    }
+
+    const updated = await recipeService.updateRecipeStatus(
+      recipeId,
+      userId,
+      status,
+    );
+
+    res.json(updated);
+  } catch (error) {
+    next(error);
+  }
+};
