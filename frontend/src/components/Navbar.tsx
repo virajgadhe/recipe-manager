@@ -50,9 +50,13 @@ const Navbar = () => {
                   Dashboard
                 </NavLink>
 
+                <NavLink to="/profile" className={navStyle}>
+                  Profile
+                </NavLink>
+
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 text-sm font-medium text-red-600 hover:text-red-800 transition"
+                  className="px-4 py-2 text-sm font-medium text-red-600 transition hover:text-red-800"
                 >
                   Logout
                 </button>

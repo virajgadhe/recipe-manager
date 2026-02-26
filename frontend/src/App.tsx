@@ -10,6 +10,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Dashboard from './pages/Dashboard';
 import CreateRecipe from './pages/recipes/CreateRecipe';
 import EditRecipe from './pages/recipes/EditRecipe';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
             }
           />
 
-            <Route
+          <Route
             path="/recipes/:id/edit"
             element={
               <ProtectedRoute>
@@ -40,7 +41,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          
+
           {/* 🔐 Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -55,6 +56,14 @@ function App() {
             }
           />
 
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
           {/*  404 */}
           <Route
             path="*"
