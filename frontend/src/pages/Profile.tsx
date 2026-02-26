@@ -50,7 +50,7 @@ export default function Profile() {
 
     try {
       await updateProfile(name);
-      setMessage("Name updated successfully ✅");
+      setMessage('Name updated successfully');
     } catch (err: unknown) {
       if (err instanceof Error) setError(err.message);
     } finally {
