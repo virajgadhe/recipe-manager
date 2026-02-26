@@ -1,5 +1,6 @@
 import { prisma } from '../lib/prisma';
 import { Prisma } from '@prisma/client';
+import { RecipeStatus } from '@prisma/client';
 
 interface RecipeInput {
   title: string;
@@ -100,6 +101,30 @@ export const deleteRecipe = async (recipeId: string, userId: string) => {
 
   await prisma.recipe.delete({
     where: { id: recipeId },
+  });
+};
+
+export const publishRecipe = async (recipeId: string, userId: string) => {
+  await verifyOwnership(recipeId, userId);
+
+  return prisma.recipe.update({
+    where: { id: recipeId },
+    data: {
+      status: RecipeStatus.PUBLISHED,
+      publishedAt: new Date(),
+    },
+  });
+};
+
+export const unpublishRecipe = async (recipeId: string, userId: string) => {
+  await verifyOwnership(recipeId, userId);
+
+  return prisma.recipe.update({
+    where: { id: recipeId },
+    data: {
+      status: RecipeStatus.DRAFT,
+      publishedAt: null,
+    },
   });
 };
 
