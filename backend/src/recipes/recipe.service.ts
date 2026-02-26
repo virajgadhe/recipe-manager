@@ -147,6 +147,7 @@ export const getPublishedRecipeById = async (id: string) => {
     where: {
       id,
       status: 'PUBLISHED',
+      publishedAt: { not: null },
     },
     include: {
       ingredients: true,
