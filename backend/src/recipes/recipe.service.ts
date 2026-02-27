@@ -114,6 +114,7 @@ export const getPublishedRecipes = async () => {
       category: true,
       _count: { select: { likes: true } },
     },
+    orderBy: { publishedAt: 'desc' },
   });
 };
 
@@ -122,10 +123,12 @@ export const getPublishedRecipeById = async (id: string) => {
     where: {
       id,
       status: 'PUBLISHED',
+      publishedAt: { not: null },
     },
     include: {
       ingredients: true,
       category: true,
+      _count: { select: { likes: true } },
     },
   });
 };

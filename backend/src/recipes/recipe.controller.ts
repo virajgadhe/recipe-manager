@@ -3,6 +3,7 @@ import { AuthRequest } from '../middlewares/auth.middleware';
 import * as recipeService from './recipe.service';
 import { recipeSchema } from './recipe.validation';
 import { Request } from 'express';
+import { prisma } from '../lib/prisma';
 
 export const createRecipe = async (
   req: AuthRequest,
@@ -94,12 +95,13 @@ export const getPublishedRecipes = async (
 };
 
 export const getRecipeById = async (
-  req: Request<{ id: string }>,
+  req: AuthRequest & { params: { id: string } },
   res: Response,
   next: NextFunction,
 ) => {
   try {
     const { id } = req.params;
+    const userId = req.userId;
 
     const recipe = await recipeService.getPublishedRecipeById(id);
 
@@ -107,11 +109,30 @@ export const getRecipeById = async (
       return res.status(404).json({ message: 'Recipe not found' });
     }
 
-    res.json(recipe);
+    let liked = false;
+
+    if (userId) {
+      const existing = await prisma.like.findUnique({
+        where: {
+          userId_recipeId: {
+            userId,
+            recipeId: id,
+          },
+        },
+      });
+
+      liked = !!existing;
+    }
+
+    res.json({
+      ...recipe,
+      liked,
+    });
   } catch (error) {
     next(error);
   }
 };
+
 export const getPopularRecipes = async (
   _req: Request,
   res: Response,

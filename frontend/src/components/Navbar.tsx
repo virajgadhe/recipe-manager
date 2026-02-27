@@ -53,7 +53,10 @@ const Navbar = () => {
                 <NavLink to="/profile" className={navStyle}>
                   Profile
                 </NavLink>
-
+                
+                <NavLink to="/likes" className={navStyle}>
+                  Likes
+                </NavLink>
                 <button
                   onClick={handleLogout}
                   className="px-4 py-2 text-sm font-medium text-red-600 transition hover:text-red-800"

@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard';
 import CreateRecipe from './pages/recipes/CreateRecipe';
 import EditRecipe from './pages/recipes/EditRecipe';
 import Profile from './pages/Profile';
+import LikedRecipes from './pages/LikedRecipes';
 
 function App() {
   return (
@@ -61,6 +62,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/likes"
+            element={
+              <ProtectedRoute>
+                <LikedRecipes />
               </ProtectedRoute>
             }
           />
