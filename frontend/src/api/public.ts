@@ -19,7 +19,12 @@ export const getCategories = async () => {
 };
 
 export const getRecipeById = async (id: string) => {
-  const res = await fetch(`${API}/api/recipes/${id}`);
+  const token = localStorage.getItem('token');
+
+  const res = await fetch(`${API}/api/recipes/${id}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+
   if (!res.ok) throw new Error('Recipe not found');
   return res.json();
 };
