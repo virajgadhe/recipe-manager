@@ -6,40 +6,47 @@ import { prisma } from '../lib/prisma';
 export const likeRecipe = async (recipeId: string, userId: string) => {
   // ensure recipe exists & is published
   const recipe = await prisma.recipe.findFirst({
-    where: { id: recipeId, status: 'PUBLISHED' },
+    where: {
+      id: recipeId,
+      status: 'PUBLISHED',
+    },
   });
 
   if (!recipe) {
-    const error = new Error('Recipe not found or not published') as Error & {
-      status?: number;
-    };
-    error.status = 404;
-    throw error;
+    throw new Error('Recipe not found or not published');
   }
 
-  // prevent duplicate likes
-  await prisma.like.create({
-    data: { recipeId, userId },
+  // prevent duplicate likes safely
+  await prisma.like.upsert({
+    where: {
+      userId_recipeId: {
+        userId,
+        recipeId,
+      },
+    },
+    update: {},
+    create: {
+      userId,
+      recipeId,
+    },
   });
 
-  return { message: 'Recipe liked' };
+  return { message: 'Liked' };
 };
 
 /**
  * Unlike recipe
  */
 export const unlikeRecipe = async (recipeId: string, userId: string) => {
-  await prisma.like.delete({
-    where: {
-      userId_recipeId: { userId, recipeId },
-    },
+  await prisma.like.deleteMany({
+    where: { recipeId, userId },
   });
 
-  return { message: 'Recipe unliked' };
+  return { message: 'Unliked' };
 };
 
 /**
- * Get recipes liked by user
+ * Recipes liked by user
  */
 export const getLikedRecipes = async (userId: string) => {
   return prisma.recipe.findMany({
@@ -47,6 +54,7 @@ export const getLikedRecipes = async (userId: string) => {
       likes: {
         some: { userId },
       },
+      status: 'PUBLISHED',
     },
     include: {
       category: true,

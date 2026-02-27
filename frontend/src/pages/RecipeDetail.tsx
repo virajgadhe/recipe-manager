@@ -76,18 +76,17 @@ export default function RecipeDetail() {
     try {
       if (liked) {
         await unlikeRecipe(recipe.id);
-        setLikesCount((c) => c - 1);
+        setLikesCount((c) => Math.max(0, c - 1));
+        setLiked(false);
       } else {
         await likeRecipe(recipe.id);
         setLikesCount((c) => c + 1);
+        setLiked(true);
       }
-
-      setLiked(!liked);
     } catch {
       alert('Failed to update like');
     }
   };
-
   if (loading) return <LoadingSkeleton />;
 
   if (notFound || !recipe) {

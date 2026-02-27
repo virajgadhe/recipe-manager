@@ -7,6 +7,7 @@ import recipeRoutes from './recipes/recipe.routes';
 import ingredientRoutes from './routes/ingredient.routes';
 import categoryRoutes from './routes/category.routes';
 import userRoutes from './routes/user.routes';
+import likeRoutes from './routes/like.routes';
 
 const app = express();
 
@@ -33,6 +34,8 @@ app.use('/api/recipes', recipeRoutes);
 
 // nested recipe resources (ingredients)
 app.use('/api/recipes', ingredientRoutes);
+
+app.use('/api', likeRoutes);
 
 // user profile
 app.use('/api/users', userRoutes);
