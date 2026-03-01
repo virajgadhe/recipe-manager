@@ -19,27 +19,27 @@ const Home = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const [pop, rec, cat] = await Promise.all([
-        getPopularRecipes(),
-        getRecentRecipes(),
-        getCategories(),
-      ]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [pop, rec, cat] = await Promise.all([
+          getPopularRecipes(),
+          getRecentRecipes(),
+          getCategories(),
+        ]);
 
-      setPopular(pop);
-      setRecent(rec);
-      setCategories(cat);
-    } catch (error) {
-      console.error('Failed to load home data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setPopular(pop);
+        setRecent(rec);
+        setCategories(cat);
+      } catch (error) {
+        console.error('Failed to load home data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchData();
-}, []);
+    fetchData();
+  }, []);
 
   return (
     <div className="bg-gray-50">
@@ -71,7 +71,7 @@ useEffect(() => {
         <section>
           <div className="flex items-center justify-between mb-10">
             <h2 className="text-3xl font-bold text-gray-900">
-              🔥 Popular Recipes
+              Popular Recipes
             </h2>
           </div>
 
@@ -89,7 +89,7 @@ useEffect(() => {
         {/* Recent */}
         <section>
           <h2 className="text-3xl font-bold text-gray-900 mb-10">
-            🆕 Recently Published
+            Recently Published
           </h2>
 
           {loading ? (
@@ -106,7 +106,7 @@ useEffect(() => {
         {/* Categories */}
         <section>
           <h2 className="text-3xl font-bold text-gray-900 mb-10">
-            📂 Browse by Category
+            Browse by Category
           </h2>
 
           <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
