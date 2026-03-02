@@ -5,14 +5,25 @@ import { Pool } from 'pg';
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL not defined');
 }
-console.log('Runtime DATABASE_URL:', process.env.DATABASE_URL);
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const globalForPrisma = global as unknown as {
+  prisma?: PrismaClient;
+  pool?: Pool;
+};
 
-const adapter = new PrismaPg(pool);
+if (!globalForPrisma.pool) {
+  globalForPrisma.pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  });
+}
 
-export const prisma = new PrismaClient({
-  adapter,
-});
+if (!globalForPrisma.prisma) {
+  const adapter = new PrismaPg(globalForPrisma.pool);
+
+  globalForPrisma.prisma = new PrismaClient({
+    adapter,
+  });
+}
+
+export const prisma = globalForPrisma.prisma;
+export const prismaPool = globalForPrisma.pool;
