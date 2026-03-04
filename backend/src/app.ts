@@ -8,12 +8,13 @@ import ingredientRoutes from './routes/ingredient.routes';
 import categoryRoutes from './routes/category.routes';
 import userRoutes from './routes/user.routes';
 import likeRoutes from './routes/like.routes';
+import path from 'path';
 
 const app = express();
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: true,
     credentials: true,
   }),
 );
@@ -40,4 +41,15 @@ app.use('/api', likeRoutes);
 // user profile
 app.use('/api/users', userRoutes);
 
+/* Serve frontend */
+
+if (process.env.NODE_ENV === 'production') {
+  const frontendPath = path.join(__dirname, '../../frontend/dist');
+
+  app.use(express.static(frontendPath));
+
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(frontendPath, 'index.html'));
+  });
+}
 export default app;
