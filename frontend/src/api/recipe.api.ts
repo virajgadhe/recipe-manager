@@ -10,7 +10,7 @@ import { http } from './http';
  * Create new recipe (Draft by default)
  */
 export function createRecipe(payload: CreateRecipePayload): Promise<Recipe> {
-  return http<Recipe>('/api/recipes', {
+  return http<Recipe>('/recipes', {
     method: 'POST',
     auth: true,
     body: JSON.stringify(payload),
@@ -21,7 +21,7 @@ export function createRecipe(payload: CreateRecipePayload): Promise<Recipe> {
  * Get current user's recipes
  */
 export function getMyRecipes(): Promise<Recipe[]> {
-  return http<Recipe[]>('/api/recipes/my-recipes', {
+  return http<Recipe[]>('/recipes/my-recipes', {
     method: 'GET',
     auth: true,
   });
@@ -31,7 +31,7 @@ export function getMyRecipes(): Promise<Recipe[]> {
  * Get single recipe by ID
  */
 export function getRecipeById(id: string): Promise<Recipe> {
-  return http<Recipe>(`/api/recipes/${id}`, {
+  return http<Recipe>(`/recipes/${id}`, {
     method: 'GET',
   });
 }
@@ -43,7 +43,7 @@ export function updateRecipe(
   id: string,
   payload: UpdateRecipePayload,
 ): Promise<Recipe> {
-  return http<Recipe>(`/api/recipes/${id}`, {
+  return http<Recipe>(`/recipes/${id}`, {
     method: 'PUT',
     auth: true,
     body: JSON.stringify(payload),
@@ -54,7 +54,7 @@ export function updateRecipe(
  * Delete recipe
  */
 export function deleteRecipe(id: string): Promise<void> {
-  return http<void>(`/api/recipes/${id}`, {
+  return http<void>(`/recipes/${id}`, {
     method: 'DELETE',
     auth: true,
   });
@@ -67,7 +67,7 @@ export function updateRecipeStatus(
   id: string,
   status: RecipeStatus,
 ): Promise<Recipe> {
-  return http<Recipe>(`/api/recipes/${id}/status`, {
+  return http<Recipe>(`/recipes/${id}/status`, {
     method: 'PATCH',
     auth: true,
     body: JSON.stringify({ status }),
@@ -75,7 +75,7 @@ export function updateRecipeStatus(
 }
 
 export function getRecipeForEdit(id: string): Promise<Recipe> {
-  return http<Recipe>(`/api/recipes/${id}/edit`, {
+  return http<Recipe>(`/recipes/${id}/edit`, {
     method: 'GET',
     auth: true,
   });
