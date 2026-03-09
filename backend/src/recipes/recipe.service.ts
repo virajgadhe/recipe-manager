@@ -98,9 +98,17 @@ export const updateRecipe = async (
 export const deleteRecipe = async (recipeId: string, userId: string) => {
   await verifyOwnership(recipeId, userId);
 
-  await prisma.recipe.delete({
-    where: { id: recipeId },
-  });
+  await prisma.$transaction([
+    prisma.like.deleteMany({
+      where: { recipeId },
+    }),
+    prisma.ingredient.deleteMany({
+      where: { recipeId },
+    }),
+    prisma.recipe.delete({
+      where: { id: recipeId },
+    }),
+  ]);
 };
 
 export const getPublishedRecipes = async () => {
