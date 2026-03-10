@@ -67,6 +67,26 @@ const Home = () => {
 
       {/* CONTENT */}
       <div className="max-w-7xl mx-auto px-6 py-20 space-y-24">
+        {/* Categories */}
+        <section>
+          <h2 className="text-3xl font-bold text-gray-900 mb-10">
+            Browse by Category
+          </h2>
+
+          <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
+            {categories.map((category) => (
+              <Link
+                key={category.id}
+                to={`/categories/${category.id}`}
+                className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition"
+              >
+                <span className="text-lg font-semibold text-gray-800">
+                  {category.name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
         {/* Popular */}
         <section>
           <div className="flex items-center justify-between mb-10">
@@ -101,27 +121,6 @@ const Home = () => {
               ))}
             </div>
           )}
-        </section>
-
-        {/* Categories */}
-        <section>
-          <h2 className="text-3xl font-bold text-gray-900 mb-10">
-            Browse by Category
-          </h2>
-
-          <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-            {categories.map((category) => (
-              <Link
-                key={category.id}
-                to={`/categories/${category.id}`}
-                className="bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-lg hover:-translate-y-1 transition"
-              >
-                <span className="text-lg font-semibold text-gray-800">
-                  {category.name}
-                </span>
-              </Link>
-            ))}
-          </div>
         </section>
       </div>
     </div>
